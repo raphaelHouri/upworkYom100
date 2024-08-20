@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "יום המאה",
+    "slug": "yom100",
+    "privacy": "public",
+    "platforms": ["ios", "android"],
+    "version": "1.7.6",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "com.dapar.yom100",
+      "supportsTablet": true
+    },
+    "description": "yom100 app for ios",
+    "extra": {
+      "eas": {
+        "projectId": "36cae2b2-d212-4233-8c5f-1c990f45c46a"
+      }
+    },
+    "android": {
+      "package": "com.dapar.yom100",
+      "minSdkVersion": 34
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.4"
+          }
+        }
+      ]
+    ]
+  }
+}

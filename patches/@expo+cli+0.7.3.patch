@@ -1,0 +1,61 @@
+diff --git a/node_modules/@expo/cli/build/src/utils/glob.js b/node_modules/@expo/cli/build/src/utils/glob.js
+index 77498d5..d83ebcf 100644
+--- a/node_modules/@expo/cli/build/src/utils/glob.js
++++ b/node_modules/@expo/cli/build/src/utils/glob.js
+@@ -16,9 +16,17 @@ function everyMatchAsync(pattern, options) {
+             if (er) reject(er);
+             else resolve(matched);
+         };
+-        g.on("error", callback);
+-        g.on("end", (matches)=>callback(null, matches)
+-        );
++
++        if (g && typeof g.on === 'function') {
++            g.on("error", callback);
++            g.on("end", (matches)=>callback(null, matches)
++            );
++          } else {
++            console.error('g is not a valid glob object');
++          }
++
++
++
+     });
+ }
+ function anyMatchAsync(pattern, options) {
+@@ -31,18 +39,23 @@ function anyMatchAsync(pattern, options) {
+             if (er) reject(er);
+             else resolve(matched);
+         };
+-        g.on("error", callback);
+-        g.on("match", (matched)=>{
+-            // We've disabled using abort as it breaks the entire glob package across all instances.
+-            // https://github.com/isaacs/node-glob/issues/279 & https://github.com/isaacs/node-glob/issues/342
+-            // For now, just collect every match.
+-            // g.abort();
+-            callback(null, [
+-                matched
+-            ]);
+-        });
+-        g.on("end", (matches)=>callback(null, matches)
+-        );
++        if (g && typeof g.on === 'function') {
++            g.on("error", callback);
++            g.on("match", (matched)=>{
++                // We've disabled using abort as it breaks the entire glob package across all instances.
++                // https://github.com/isaacs/node-glob/issues/279 & https://github.com/isaacs/node-glob/issues/342
++                // For now, just collect every match.
++                // g.abort();
++                callback(null, [
++                    matched
++                ]);
++            });
++            g.on("end", (matches)=>callback(null, matches)
++            );
++          } else {
++            console.error('g is not a valid glob object');
++          }
++
+     });
+ }
+ function wrapGlobWithTimeout(query, duration) {
