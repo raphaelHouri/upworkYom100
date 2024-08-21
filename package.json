@@ -22,7 +22,7 @@
     "@unimodules/core": "~7.2.0",
     "@use-expo/font": "^2.0.0",
     "deprecated-react-native-prop-types": "^4.2.1",
-    "expo": "^48.0.0",
+    "expo": "^51.0.29",
     "expo-app-loading": "1.1.2",
     "expo-asset": "~8.9.1",
     "expo-build-properties": "^0.12.3",

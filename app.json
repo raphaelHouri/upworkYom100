@@ -28,6 +28,8 @@
     },
     "android": {
       "package": "com.dapar.yom100",
+      "targetSdkVersion": 34,
+      "compileSdkVersion": 34,
       "minSdkVersion": 34
     },
     "plugins": [
