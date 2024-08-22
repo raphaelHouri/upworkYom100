@@ -23,14 +23,11 @@
     "description": "yom100 app for ios",
     "extra": {
       "eas": {
-        "projectId": "36cae2b2-d212-4233-8c5f-1c990f45c46a"
+        "projectId": "b371d939-5ffc-4bac-accc-72a051515ef5"
       }
     },
     "android": {
-      "package": "com.dapar.yom100",
-      "targetSdkVersion": 34,
-      "compileSdkVersion": 34,
-      "minSdkVersion": 34
+      "package": "com.dapar.yom100"
     },
     "plugins": [
       [
@@ -45,7 +42,9 @@
             "deploymentTarget": "13.4"
           }
         }
-      ]
+      ],
+      "expo-asset",
+      "expo-font"
     ]
   }
 }

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView } from "react-native";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "@use-expo/font";
 import { Asset } from "expo-asset";
 import { Block, GalioProvider } from "galio-framework";
@@ -13,7 +13,8 @@ enableScreens();
 
 import Screens from "./navigation/Screens";
 import { Images, articles, argonTheme } from "./constants";
-
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 // cache app images
 const assetImages = [Images.Onboarding];
 
@@ -38,8 +39,11 @@ export default (props) => {
   let [fontsLoaded] = useFonts({
     ArgonExtra: require("./assets/font/argon.ttf"),
   });
+  useEffect(() => {
+    loadResourcesAsync();
+  }, []);
 
-  function _loadResourcesAsync() {
+  function loadResourcesAsync() {
     async function api_content() {
       const response = await fetch(
         // Make this YOUR URL
@@ -50,32 +54,15 @@ export default (props) => {
       return json;
     }
 
-    api_content().then((res) => {
+    api_content().then(async (res) => {
       setLoad(res);
       setAnswer(true);
+      await SplashScreen.hideAsync();
     });
     return Promise.all([...cacheImages(assetImages)]);
   }
 
-  function _handleLoadingError(error) {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error);
-  }
-
-  function _handleFinishLoading() {
-    setLoading(true);
-  }
-
-  if (!fontsLoaded && !isLoadingComplete) {
-    return (
-      <AppLoading
-        startAsync={_loadResourcesAsync}
-        onError={_handleLoadingError}
-        onFinish={_handleFinishLoading}
-      />
-    );
-  } else if (fontsLoaded && !load && answer) {
+  if (fontsLoaded && !load && answer) {
     return (
       <NavigationContainer>
         <GalioProvider theme={argonTheme}>
@@ -85,21 +72,14 @@ export default (props) => {
         </GalioProvider>
       </NavigationContainer>
     );
-  } else if (load && answer) {
+  }
+  if (load && answer) {
     return (
       <SafeAreaView
         style={{ flex: 1, paddingTop: 30, backgroundColor: "#fcbe3c" }}
       >
         {/* <WebView source={{ uri: "https://mobile.yom100.co.il/" }} /> */}
       </SafeAreaView>
-    );
-  } else {
-    return (
-      <AppLoading
-        startAsync={_loadResourcesAsync}
-        onError={_handleLoadingError}
-        onFinish={_handleFinishLoading}
-      />
     );
   }
 };
