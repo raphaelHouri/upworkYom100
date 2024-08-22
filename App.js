@@ -13,8 +13,6 @@ enableScreens();
 
 import Screens from "./navigation/Screens";
 import { Images, articles, argonTheme } from "./constants";
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
 // cache app images
 const assetImages = [Images.Onboarding];
 
@@ -32,37 +30,52 @@ function cacheImages(images) {
 }
 
 export default (props) => {
-  const [isLoadingComplete, setLoading] = useState(false);
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [load, setLoad] = useState(false);
   const [answer, setAnswer] = useState(false);
-  const [result, setResult] = useState(null);
   let [fontsLoaded] = useFonts({
     ArgonExtra: require("./assets/font/argon.ttf"),
   });
+  // Prevent the splash screen from auto-hiding
   useEffect(() => {
-    loadResourcesAsync();
+    SplashScreen.preventAutoHideAsync();
   }, []);
+  useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        await _loadResourcesAsync();
+      } catch (e) {
+        _handleLoadingError(e);
+      } finally {
+        setLoadingComplete(true);
+        SplashScreen.hideAsync(); // Hide the splash screen once loading is complete
+      }
+    }
 
-  function loadResourcesAsync() {
+    loadResourcesAndDataAsync();
+  }, []);
+  async function _loadResourcesAsync() {
     async function api_content() {
-      const response = await fetch(
-        // Make this YOUR URL
-        "https://dapar.co.il/api.php?v=4",
-        {}
-      );
+      const response = await fetch("https://dapar.co.il/api.php?v=4", {});
       const json = await response.json();
       return json;
     }
 
-    api_content().then(async (res) => {
+    api_content().then((res) => {
       setLoad(res);
       setAnswer(true);
-      await SplashScreen.hideAsync();
     });
-    return Promise.all([...cacheImages(assetImages)]);
+
+    await Promise.all([...cacheImages(assetImages)]); // Ensure images are cached
   }
 
-  if (fontsLoaded && !load && answer) {
+  function _handleLoadingError(error) {
+    console.warn(error);
+  }
+
+  if (!isLoadingComplete || !fontsLoaded) {
+    return null; // Don't render anything while loading
+  } else if (fontsLoaded && !load && answer) {
     return (
       <NavigationContainer>
         <GalioProvider theme={argonTheme}>
@@ -72,8 +85,7 @@ export default (props) => {
         </GalioProvider>
       </NavigationContainer>
     );
-  }
-  if (load && answer) {
+  } else if (load && answer) {
     return (
       <SafeAreaView
         style={{ flex: 1, paddingTop: 30, backgroundColor: "#fcbe3c" }}
@@ -81,5 +93,7 @@ export default (props) => {
         {/* <WebView source={{ uri: "https://mobile.yom100.co.il/" }} /> */}
       </SafeAreaView>
     );
+  } else {
+    return null; // You can return a placeholder here if necessary
   }
 };
