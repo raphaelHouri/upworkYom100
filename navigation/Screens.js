@@ -29,7 +29,9 @@ const Drawer = createDrawerNavigator();
 
 function ElementsStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator
+      screenOptions={{ headerMode: "screen", presentation: "card" }}
+    >
       <Stack.Screen
         name="Elements"
         component={Elements}
@@ -63,7 +65,9 @@ function ElementsStack(props) {
 
 function HomeStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator
+      screenOptions={{ headerMode: "screen", presentation: "card" }}
+    >
       <Stack.Screen
         name="Home"
         component={Home}
@@ -71,7 +75,7 @@ function HomeStack(props) {
           headerTitle: "",
           header: ({ navigation, scene }) => (
             <Header
-              title=""
+              title="Home"
               search
               options
               navigation={navigation}
@@ -137,7 +141,9 @@ function HomeStack(props) {
 }
 function HomeTestStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="screen">
+    <Stack.Navigator
+      screenOptions={{ headerMode: "screen", presentation: "card" }}
+    >
       <Stack.Screen
         name="HomeTest"
         component={HomeTest}
@@ -177,7 +183,9 @@ function HomeTestStack(props) {
 
 export default function OnboardingStack(props) {
   return (
-    <Stack.Navigator mode="card" headerMode="none">
+    <Stack.Navigator
+      screenOptions={{ headerMode: "none", presentation: "card" }}
+    >
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}
@@ -200,7 +208,8 @@ function AppStack(props) {
           backgroundColor: "white",
           width: width * 0.8,
         }}
-        drawerContentOptions={{
+        screenOptions={{
+          headerShown: false,
           activeTintcolor: "white",
           inactiveTintColor: "#000",
           activeBackgroundColor: "transparent",
@@ -220,9 +229,9 @@ function AppStack(props) {
             fontWeight: "normal",
           },
         }}
-        initialRouteName="Home"
+        initialRouteName="DrawerHome"
       >
-        <Drawer.Screen name="Home" component={HomeStack} />
+        <Drawer.Screen name="DrawerHome" component={HomeStack} />
         <Drawer.Screen name="HomeTest" component={HomeTestStack} />
         <Drawer.Screen name="Elements" component={ElementsStack} />
       </Drawer.Navigator>

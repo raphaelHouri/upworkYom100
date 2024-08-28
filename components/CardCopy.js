@@ -1,76 +1,54 @@
 import React from "react";
 import { withNavigation } from "@react-navigation/compat";
 import PropTypes from "prop-types";
-import {
-  StyleSheet,
-  Dimensions,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import { Block, Text, theme } from "galio-framework";
-
 import { argonTheme } from "../constants";
 
-class CardCopy extends React.Component {
-  render() {
-    const {
-      navigation,
-      item,
-      horizontal,
-      full,
-      fullA,
-      style,
-      ctaColor,
-      imageStyle,
-    } = this.props;
+const CardCopy = ({
+  navigation,
+  item,
+  horizontal,
+  full,
+  style,
+  ctaColor,
+  imageStyle,
+}) => {
+  const imageStyles = [
+    full ? styles.fullImage : styles.horizontalImage,
+    imageStyle,
+  ];
 
-    const imageStyles = [
-      full ? styles.fullImage : styles.horizontalImage,
-      imageStyle,
-    ];
-    const cardContainer = [styles.card, styles.shadow, style];
-    const imgContainer = [
-      styles.imageContainer,
-      horizontal ? styles.horizontalStyles : styles.verticalStyles,
-      styles.shadow,
-    ];
-    if (full) {
-      return (
-        <Block row={horizontal} card flex style={cardContainer}>
-          <Block flex right style={styles.cardDescription}>
-            <Text size={12} muted={!ctaColor} color={"#00a6ac"} bold>
-              {item.cta}
-            </Text>
-          </Block>
-          {/* <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}> */}
-          <Block flex style={imgContainer}>
-            <Image source={{ uri: item.image }} style={imageStyles} />
-          </Block>
-          {/* </TouchableWithoutFeedback> */}
-          {/* <TouchableWithoutFeedback onPress={() => navigation.navigate('Pro')}> */}
+  const cardContainer = [styles.card, styles.shadow, style];
+  const imgContainer = [
+    styles.imageContainer,
+    horizontal ? styles.horizontalStyles : styles.verticalStyles,
+    styles.shadow,
+  ];
 
-          {/* </TouchableWithoutFeedback> */}
+  if (full) {
+    return (
+      <Block row={horizontal} card flex style={cardContainer}>
+        <Block flex right style={styles.cardDescription}>
+          <Text size={12} muted={!ctaColor} color={"#00a6ac"} bold>
+            {item.cta}
+          </Text>
         </Block>
-      );
-    }
-    // }else if(fullA){
-    //   <Block row={horizontal} card flex style={cardContainer}>
-    //     <Block flex style={imgContainer}>
-    //       <Image source={{ uri: item.image }} style={imageStyles} />
-    //     </Block>
-    //   </Block>;
-    // } 
-    else {
-      return (
-        <Block row={horizontal} card flex style={cardContainer}>
-          <Block flex style={imgContainer}>
-            <Image source={{ uri: item.image }} style={imageStyles} />
-          </Block>
+        <Block flex style={imgContainer}>
+          <Image source={{ uri: item.image }} style={imageStyles} />
         </Block>
-      );
-    }
+      </Block>
+    );
+  } else {
+    return (
+      <Block row={horizontal} card flex style={cardContainer}>
+        <Block flex style={imgContainer}>
+          <Image source={{ uri: item.image }} style={imageStyles} />
+        </Block>
+      </Block>
+    );
   }
-}
+};
 
 CardCopy.propTypes = {
   item: PropTypes.object,
@@ -100,14 +78,10 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     overflow: "hidden",
   },
-  image: {
-    // borderRadius: 3,
-  },
   horizontalImage: {
     height: 122,
     width: "auto",
-    resizeMode: 'contain',
-
+    resizeMode: "contain",
   },
   horizontalStyles: {
     borderTopRightRadius: 0,
@@ -119,10 +93,8 @@ const styles = StyleSheet.create({
   },
   fullImage: {
     height: 150,
-    resizeMode: 'contain',
-
+    resizeMode: "contain",
   },
-
 });
 
 export default withNavigation(CardCopy);
